@@ -2,7 +2,6 @@ package ncp_solver
 
 import (
 	"fmt"
-	"strings"
 )
 
 type Solver struct {
@@ -11,21 +10,27 @@ type Solver struct {
 	solution     [9]int // tile index, keyed by position.
 	orientations [9]int // the orientation of each tile, keyed by tile index
 	debug        bool
+	findAll      bool
+	registry     Registry
 }
 
 func Solve(puzzle [9]Tile) string {
 	s := &Solver{
 		debug:        false,
-		puzzle:       (puzzle),
+		findAll:      true,
+		puzzle:       puzzle,
 		size:         9,
 		solution:     [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
 		orientations: [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
+		registry:     Registry{},
 	}
 
-	if s.solve(0) {
+	s.solve(0)
+
+	if len(s.registry) > 0 {
 		// End log with an empty line
 		s.logger("")
-		return s.format()
+		return s.registry.format()
 	} else {
 		return "no solution"
 	}
@@ -33,7 +38,8 @@ func Solve(puzzle [9]Tile) string {
 
 func (s *Solver) solve(position int) bool {
 	if position == s.size {
-		return true
+		s.registry.add(s.solution, s.orientations)
+		return !s.findAll
 	}
 
 	neighboringEdges := s.neighboringEdges(position)
@@ -107,13 +113,13 @@ func (s *Solver) edgeFits(a, b *Edge) bool {
 }
 
 func (s *Solver) place(tile, position, orientation int) {
-	s.logger("✅ tile %d fits at position %d facing %c", tile+1, position, s.oFormat(orientation))
+	s.logger("✅ tile %d fits at position %d facing %c", tile+1, position, formatO9n(orientation))
 	s.solution[position] = tile
 	s.orientations[tile] = orientation
 }
 
 func (s *Solver) remove(tile, position, orientation int) {
-	s.logger("❌ tile %d does not fit at position %d facing %c", tile+1, position, s.oFormat(orientation))
+	s.logger("❌ tile %d does not fit at position %d facing %c", tile+1, position, formatO9n(orientation))
 	s.solution[position] = -1
 	s.orientations[tile] = -1
 }
@@ -121,7 +127,7 @@ func (s *Solver) remove(tile, position, orientation int) {
 func (s *Solver) logNeighbors(neighboringEdges [4]*Edge) {
 	for i, edge := range neighboringEdges {
 		if edge != nil {
-			s.logger("Neighbor edge %c: %s", s.oFormat(i), edge.String())
+			s.logger("Neighbor edge %c: %s", formatO9n(i), edge.String())
 		}
 	}
 }
@@ -133,20 +139,6 @@ func (s *Solver) logger(format string, args ...any) {
 	}
 }
 
-func (s *Solver) format() string {
-	lines := []string{
-		"Tile number by position, including the orientation of North/top edge of tile",
-		"",
-		"P: T O",
-		"––––––",
-	}
-	for position, tile := range s.solution {
-		orientation := s.oFormat(s.orientations[tile])
-		lines = append(lines, fmt.Sprintf("%d: %d %c", position, tile+1, orientation))
-	}
-	return strings.Join(lines, "\n")
-}
-
-func (s *Solver) oFormat(orientation int) uint8 {
+func formatO9n(orientation int) uint8 {
 	return "NESW"[orientation]
 }
