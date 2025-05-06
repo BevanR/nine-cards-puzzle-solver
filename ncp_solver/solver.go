@@ -8,9 +8,8 @@ import (
 type Solver struct {
 	size         int
 	puzzle       [9]Tile
-	positions    [9]int // map of tile index to its position in the current solution
-	tiles        [9]int // the reverse map; tile index by position.
-	orientations [9]int // the orientation of each tile, by position
+	solution     [9]int // tile index, keyed by position.
+	orientations [9]int // the orientation of each tile, keyed by tile index
 	debug        bool
 }
 
@@ -19,8 +18,7 @@ func Solve(puzzle [9]Tile) string {
 		debug:        false,
 		puzzle:       (puzzle),
 		size:         9,
-		tiles:        [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
-		positions:    [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
+		solution:     [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
 		orientations: [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
 	}
 
@@ -79,18 +77,18 @@ func (s *Solver) neighboringEdges(position int) [4]*Edge {
 func (s *Solver) getEdge(x, y int, side Orientation) *Edge {
 	if 0 <= x && x < 3 && 0 <= y && y < 3 {
 		position := x + y*3
-		if index := s.tiles[position]; index >= 0 {
+		if tile := s.solution[position]; tile >= 0 {
 			// Factor in the tile's current orientation.
-			orientation := s.orientations[position]
+			orientation := s.orientations[tile]
 			o := (4 - orientation + int(side)) % 4
-			return &s.puzzle[index][o]
+			return &s.puzzle[tile][o]
 		}
 	}
 	return nil
 }
 
 func (s *Solver) alreadyPlaced(tile int) bool {
-	return s.positions[tile] >= 0
+	return s.orientations[tile] >= 0
 }
 
 func (s *Solver) fits(tile, orientation int, neighbouringEdges [4]*Edge) bool {
@@ -109,23 +107,21 @@ func (s *Solver) edgeFits(a, b *Edge) bool {
 }
 
 func (s *Solver) place(tile, position, orientation int) {
-	s.logger("✅ tile %d fits at position %d facing %c", tile+1, position, s.orientationStr(orientation))
-	s.positions[tile] = position
-	s.tiles[position] = tile
-	s.orientations[position] = orientation
+	s.logger("✅ tile %d fits at position %d facing %c", tile+1, position, s.oFormat(orientation))
+	s.solution[position] = tile
+	s.orientations[tile] = orientation
 }
 
 func (s *Solver) remove(tile, position, orientation int) {
-	s.logger("❌ tile %d does not fit at position %d facing %c", tile+1, position, s.orientationStr(orientation))
-	s.tiles[position] = -1
-	s.positions[tile] = -1
-	s.orientations[position] = -1
+	s.logger("❌ tile %d does not fit at position %d facing %c", tile+1, position, s.oFormat(orientation))
+	s.solution[position] = -1
+	s.orientations[tile] = -1
 }
 
 func (s *Solver) logNeighbors(neighboringEdges [4]*Edge) {
 	for i, edge := range neighboringEdges {
 		if edge != nil {
-			s.logger("Neighbor edge %c: %s", s.orientationStr(i), edge.String())
+			s.logger("Neighbor edge %c: %s", s.oFormat(i), edge.String())
 		}
 	}
 }
@@ -144,15 +140,13 @@ func (s *Solver) format() string {
 		"P: T O",
 		"––––––",
 	}
-	for p := range s.size {
-		t := s.tiles[p]
-		o := s.orientationStr(s.orientations[p])
-		lines = append(lines, fmt.Sprintf("%d: %d %c", p, t+1, o))
+	for position, tile := range s.solution {
+		orientation := s.oFormat(s.orientations[tile])
+		lines = append(lines, fmt.Sprintf("%d: %d %c", position, tile+1, orientation))
 	}
 	return strings.Join(lines, "\n")
 }
 
-func (s *Solver) orientationStr(orientation int) uint8 {
-	orientations := "NESW"
-	return orientations[orientation]
+func (s *Solver) oFormat(orientation int) uint8 {
+	return "NESW"[orientation]
 }
