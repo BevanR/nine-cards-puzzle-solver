@@ -25,7 +25,7 @@ func Solve(puzzle [9]Tile) string {
 
 	s.solve(0)
 
-	if len(s.registry) > 0 {
+	if s.registry.Count() > 0 {
 		// End log with an empty line
 		s.logger("")
 		return s.registry.format()
@@ -61,6 +61,11 @@ func (s *Solver) solve(position int) bool {
 
 				s.remove(tile, position, orientation)
 			}
+		}
+
+		// Don't rotate the middle tile. This prevents duplicate solutions in alternate orientations being found. E.g. rotating an entire solution 90º.
+		if position == 4 {
+			break
 		}
 	}
 

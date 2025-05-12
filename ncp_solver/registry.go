@@ -10,37 +10,32 @@ type Solution struct {
 	orientations [9]int
 }
 
-type Registry map[Solution]bool
-
-func (r Registry) add(solution, orientations [9]int) {
-	key := Solution{solution, orientations}
-	_, ok := r[key]
-	if !ok {
-		r[key] = true
-		for range 3 {
-			// Deduplicate solutions; Rotate 90º and get new key.
-			key = key.rotate()
-			r[key] = false
-		}
-	}
+type Registry struct {
+	solutions []Solution
 }
 
-func (r Registry) format() string {
-	solutions := []string{}
-	for solution, unique := range r {
-		if unique {
-			solutions = append(solutions, solution.format())
-		}
-	}
+func (r *Registry) add(solution, orientations [9]int) {
+	r.solutions = append(r.solutions, Solution{solution, orientations})
+}
+
+func (r *Registry) format() string {
 	result := []string{
-		fmt.Sprintf("Solutions found: %d", len(solutions)),
+		fmt.Sprintf("Solutions found: %d", len(r.solutions)),
 		"",
 		"Tile number by position, including the orientation of North/top edge of tile",
 		"",
 		"P: T O",
 	}
-	result = append(result, solutions...)
+
+	for _, s := range r.solutions {
+		result = append(result, s.format())
+	}
+
 	return strings.Join(result, "\n")
+}
+
+func (r *Registry) Count() int {
+	return len(r.solutions)
 }
 
 func (s *Solution) format() string {
