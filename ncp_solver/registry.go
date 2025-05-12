@@ -18,9 +18,8 @@ func (r Registry) add(solution, orientations [9]int) {
 	if !ok {
 		r[key] = true
 		for range 3 {
-			// Deduplicate solutions.
-			// TODO Rotate 90º and get new key.
-			// Once we're confident that each unique solution is found exactly four times, simplify the algorithm;
+			// Deduplicate solutions; Rotate 90º and get new key.
+			// TODO Once we're confident that each unique solution is found exactly four times, simplify the algorithm;
 			// Never rotate position 0.
 			key = key.rotate()
 			r[key] = false
