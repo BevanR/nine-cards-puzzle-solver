@@ -5,7 +5,6 @@ import (
 )
 
 type Solver struct {
-	size         int
 	puzzle       [9]Tile
 	solution     [9]int // tile index, keyed by position.
 	orientations [9]int // the orientation of each tile, keyed by tile index
@@ -19,7 +18,6 @@ func Solve(puzzle [9]Tile) string {
 		debug:        false,
 		findAll:      true,
 		puzzle:       puzzle,
-		size:         9,
 		solution:     [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
 		orientations: [9]int{-1, -1, -1, -1, -1, -1, -1, -1, -1},
 		registry:     Registry{},
