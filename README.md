@@ -4,13 +4,15 @@ Finds solutions to the nine cards puzzle by Portel—or at least [the light bulb
 
 The puzzle has nine square tiles, which must be arranged in a 3-by-3 grid such that every light bulb that neighbours another tile is complete.
 
-### An invalid arrangement from Portel's website
+## An invalid arrangement from Portel's website
 
 ![image](https://github.com/user-attachments/assets/1e665c1e-5d06-46ea-ac80-3446849439c1)
 
-### A valid solution, found using this tool
+## A valid solution, found using this tool
 
 ![image](https://github.com/user-attachments/assets/890b4908-36ab-4d8f-b8c6-fe939bf7094c)
+
+## How many arrangements?
 
 There are nearly 24 billion possible arrangements;
 
@@ -23,6 +25,8 @@ There are nearly 24 billion possible arrangements;
 
 A brute force of trying all 24B arrangements would take a long time, [even for a computer](https://github.com/dcreemer/scramble#:~:text=naive%20golang%20solution%20took%20almost%2022%20minutes%20to%20find%20all%20of%20the%20solutions).
 
+## Approach
+
 The optimal approach is to;
 
 1. For a given position (start with the first)
@@ -30,6 +34,27 @@ The optimal approach is to;
 3. If it does, move to the next position (recursively) and repeat
 4. If it does not fit, or if after checking the following positions there are no valid solutions with this tile in this position, rotate it a quarter turn to the next orientation
 5. Once all four orientations have been exhausted, try the next unused tile in this position
+
+The implementation iterates through orientations (rotation) before iterating over tiles to make the code comments clearer.
+
+As an optimisation and deduplication step, the middle tile can be never-rotated. This avoids discovering duplicate solutions that differ only be rotating the entire solution.
+
+There may be some micro optimisation by changing the order positions are iterated through to optimise comparing edges vs placing tiles. This implementation simply goes top left (position 0) to bottom right (9). However filling these positions first may be faster;
+
+|   |   |   |
+|---|---|---|
+| X |   | X |
+|   | X |   |
+| X |   | X |
+
+Or perhaps;
+
+|   |   |   |
+|---|---|---|
+| X | X |   |
+| X |   |   |
+|   |   | &nbsp; |
+
 
 ## Solutions
 
