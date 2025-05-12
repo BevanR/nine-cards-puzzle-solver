@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	println(ncp_solver.Solve(ncp_solver.LightBulbsPuzzleOrder))
+	println(ncp_solver.Solve(ncp_solver.LightBulbsPuzzle))
 }
