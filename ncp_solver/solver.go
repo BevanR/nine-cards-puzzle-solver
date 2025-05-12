@@ -23,7 +23,7 @@ func Solve(puzzle [9]Tile) string {
 		registry:     Registry{},
 	}
 
-	s.findTileThatFits(0, 0, s.neighboringEdges(0))
+	s.solve(0)
 
 	if len(s.registry) > 0 {
 		// End log with an empty line
@@ -34,28 +34,7 @@ func Solve(puzzle [9]Tile) string {
 	}
 }
 
-func (s *Solver) solve() {
-	s.findTileThatFits(0, 0, s.neighboringEdges(0))
-}
-
-func (s *Solver) findTileThatFits(position, orientation int, neighboringEdges [4]*Edge) bool {
-	for tile := range 9 {
-		if !s.alreadyPlaced(tile) && s.fits(tile, orientation, neighboringEdges) {
-			s.place(tile, position, orientation)
-
-			// Recursion! Move onto next position.
-			if s.rotateAndSolve(position + 1) {
-				return true
-			}
-
-			s.remove(tile, position, orientation)
-		}
-	}
-
-	return false
-}
-
-func (s *Solver) rotateAndSolve(position int) bool {
+func (s *Solver) solve(position int) bool {
 	if position == 9 {
 		s.registry.add(s.solution, s.orientations)
 		return !s.findAll
@@ -71,8 +50,17 @@ func (s *Solver) rotateAndSolve(position int) bool {
 	// The 2nd loop checks N edge with W edge of E tile, E edge with N edge of S tile, etc.
 	// Etcetera
 	for orientation := range 4 {
-		if s.findTileThatFits(position, orientation, neighboringEdges) {
-			return true
+		for tile := range 9 {
+			if !s.alreadyPlaced(tile) && s.fits(tile, orientation, neighboringEdges) {
+				s.place(tile, position, orientation)
+
+				// Recursion! Move onto next position.
+				if s.solve(position + 1) {
+					return true
+				}
+
+				s.remove(tile, position, orientation)
+			}
 		}
 	}
 
