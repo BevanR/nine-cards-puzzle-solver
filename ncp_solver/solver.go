@@ -112,17 +112,20 @@ func (s *Solver) fits(tile, orientation int, neighbouringEdges [4]*Edge) bool {
 }
 
 func (s *Solver) edgeFits(a, b *Edge) bool {
+	s.registry.comparisons++
 	return a.Color == b.Color && a.Piece != b.Piece && a.Position != b.Position
 }
 
 func (s *Solver) place(tile, position, orientation int) {
 	s.logger("✅ tile %d fits at position %d facing %c", tile+1, position, formatO9n(orientation))
+	s.registry.placements++
 	s.solution[position] = tile
 	s.orientations[tile] = orientation
 }
 
 func (s *Solver) remove(tile, position, orientation int) {
 	s.logger("❌ tile %d does not fit at position %d facing %c", tile+1, position, formatO9n(orientation))
+	s.registry.removals++
 	s.solution[position] = -1
 	s.orientations[tile] = -1
 }

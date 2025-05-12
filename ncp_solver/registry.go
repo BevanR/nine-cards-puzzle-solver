@@ -11,7 +11,10 @@ type Solution struct {
 }
 
 type Registry struct {
-	solutions []Solution
+	solutions   []Solution
+	comparisons int
+	placements  int
+	removals    int
 }
 
 func (r *Registry) add(solution, orientations [9]int) {
@@ -20,7 +23,10 @@ func (r *Registry) add(solution, orientations [9]int) {
 
 func (r *Registry) format() string {
 	result := []string{
-		fmt.Sprintf("Solutions found: %d", len(r.solutions)),
+		fmt.Sprintf("solutions: %d", len(r.solutions)),
+		fmt.Sprintf("comparisons: %d", r.comparisons),
+		fmt.Sprintf("placements: %d", r.placements),
+		fmt.Sprintf("removals: %d", r.removals),
 		"",
 		"Tile number by position, including the orientation of North/top edge of tile",
 		"",
