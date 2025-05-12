@@ -14,14 +14,14 @@ The puzzle has nine square tiles, which must be arranged in a 3-by-3 grid such t
 
 There are nearly 24 billion possible arrangements;
 
-| Variable                                                                                              | Quantity         |
-|-------------------------------------------------------------------------------------------------------|--------------|
-| 9 cards can be arranged in 9 different positions                                                      | 9!     | 362,880 |
-| 4 orientations of each of the 9 cards/positions                                                       | 4<sup>9</sup>    | 262,144 |
+| Variable                                                                                              | Quantity           | Total            |
+|-------------------------------------------------------------------------------------------------------|--------------------|------------------|
+| 9 cards can be arranged in 9 different positions                                                      | 9!                 | 362,880          |
+| 4 orientations of each of the 9 cards/positions                                                       | 4<sup>9</sup>      | 262,144          |
 | Total                                                                                                 | 9! ✖ 4<sup>9</sup> | = 95,126,814,720 |
 | Each arrangement can be specified in four different orientations, meaning only ¼ of those are unique. | 9! ✖ 4<sup>8</sup> | = 23,781,703,680 |
 
-A brute force of trying all 24B arrangements would take a long time, https://github.com/dcreemer/scramble#:~:text=naive%20golang%20solution%20took%20almost%2022%20minutes%20to%20find%20all%20of%20the%20solutions.
+A brute force of trying all 24B arrangements would take a long time, [even for a computer](https://github.com/dcreemer/scramble#:~:text=naive%20golang%20solution%20took%20almost%2022%20minutes%20to%20find%20all%20of%20the%20solutions).
 
 The optimal approach is to;
 
