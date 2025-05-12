@@ -36,6 +36,8 @@ func Solve(puzzle [9]Tile) string {
 	}
 }
 
+// TODO Deduplicate the four orientations of each unique solution by skipping rotation of the first position;
+// Split solve() into two; solve() and rotateAndSolve(), then start the recursion with solve(pos: 0, orientation: 0)
 func (s *Solver) solve(position int) bool {
 	if position == s.size {
 		s.registry.add(s.solution, s.orientations)
