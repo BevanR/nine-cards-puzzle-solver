@@ -30,3 +30,7 @@ The optimal approach is to;
 3. If it does, move to the next position (recursively) and repeat
 4. If it does not fit, or if after checking the following positions there are no valid solutions with this tile in this position, rotate it a quarter turn to the next orientation
 5. Once all four orientations have been exhausted, try the next unused tile in this position
+
+There are 3 unique solutions for this light bulbs variation of the puzzle. It doesn't currently support other puzzles.
+
+![image](https://github.com/user-attachments/assets/e7e3877c-c210-43f9-8596-c9fb30f11b44)
