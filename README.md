@@ -31,6 +31,54 @@ The optimal approach is to;
 4. If it does not fit, or if after checking the following positions there are no valid solutions with this tile in this position, rotate it a quarter turn to the next orientation
 5. Once all four orientations have been exhausted, try the next unused tile in this position
 
+## Solutions
+
 There are 3 unique solutions for this light bulbs variation of the puzzle. It doesn't currently support other puzzles.
 
 ![image](https://github.com/user-attachments/assets/e7e3877c-c210-43f9-8596-c9fb30f11b44)
+
+Tile number by position, including the orientation of North/top edge of tile.
+
+| Position | Tile | Orientation |
+|----------|------|-------------|
+| 0        | 1    | N           |
+| 1        | 4    | W           |
+| 2        | 3    | E           |
+| 3        | 7    | W           |
+| 4        | 5    | N           |
+| 5        | 9    | S           |
+| 6        | 2    | E           |
+| 7        | 8    | W           |
+| 8        | 6    | S           |
+
+| Position | Tile | Orientation |
+|----------|------|-------------|
+| 0        | 2    | N           |
+| 1        | 1    | W           |
+| 2        | 4    | E           |
+| 3        | 8    | W           |
+| 4        | 5    | N           |
+| 5        | 9    | S           |
+| 6        | 3    | E           |
+| 7        | 7    | W           |
+| 8        | 6    | S           |
+
+| Position | Tile | Orientation |
+|----------|------|-------------|
+| 0        | 1    | W           |
+| 1        | 7    | S           |
+| 2        | 9    | S           |
+| 3        | 5    | N           |
+| 4        | 2    | N           |
+| 5        | 6    | S           |
+| 6        | 4    | S           |
+| 7        | 8    | W           |
+| 8        | 3    | S           |
+
+### Positions reference
+
+|   |   |   |
+|---|---|---|
+| 0 | 1 | 2 |
+| 3 | 4 | 5 |
+| 6 | 7 | 8 |
